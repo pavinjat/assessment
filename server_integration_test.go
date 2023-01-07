@@ -63,17 +63,35 @@ func TestGetAllExpensesHandler(t *testing.T) {
 	assert.Greater(t, len(allexpenses), 0)
 }
 
-/*func TestUpdateExpenseHandler(t *testing.T) {
-	t.Skip("TODO: implement me")
-}*/
+func TestUpdateExpenseHandler(t *testing.T) {
+	c := seedExpense(t)
+	body := bytes.NewBufferString(`{
+		"title": "TestUpdateObj",
+		"amount": 300,
+		"note": "Note for TestUpdateObj", 
+		"tags": ["TestUpdateTag1", "TestUpdateTag2" ,"TestUpdateTag3"]
+	}`)
+
+	var latest expenses.Expense
+	res := request(http.MethodPut, uri("expenses", strconv.Itoa(c.ID)), body)
+	err := res.Decode(&latest)
+
+	assert.Nil(t, err)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+	assert.NotEqual(t, 0, latest.ID)
+	assert.Equal(t, "TestUpdateObj", latest.Title)
+	assert.Equal(t, 300, latest.Amount)
+	assert.Equal(t, "Note for TestUpdateObj", latest.Note)
+	assert.Equal(t, []string{"TestUpdateTag1", "TestUpdateTag2", "TestUpdateTag3"}, latest.Tags)
+}
 
 func seedExpense(t *testing.T) expenses.Expense {
 	var c expenses.Expense
 	body := bytes.NewBufferString(`{
-		"title": "TestObj",
-		"amount": 100,
-		"note": "Note for TestObj", 
-		"tags": ["TestTag1", "TestTag2" ,"TestTag3", "TestTag4"]
+		"title": "TestSeedObj",
+		"amount": 200,
+		"note": "Note for TestSeedObj", 
+		"tags": ["TestSeedTag1", "TestSeedTag2"]
 	}`)
 	err := request(http.MethodPost, uri("expenses"), body).Decode(&c)
 	if err != nil {
