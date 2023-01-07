@@ -21,7 +21,7 @@ func main() {
 	e := echo.New()
 
 	e.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
-		if username == "apidesign" || password == "45678" {
+		if username == "expensesapi" || password == "123456" {
 			return true, nil
 		}
 		return false, nil
