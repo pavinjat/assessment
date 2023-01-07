@@ -20,6 +20,8 @@ FROM alpine:3.16.2
 
 COPY --from=build-base /app/out/go-app /app/go-app
 
-EXPOSE 2565
+ENV PORT=":2565"
+
+ENV DATABASE_URL=postgres://drwpotzv:w2RbhmLcpNNQCTSwCNZLcIyhTKdbDrQ6@john.db.elephantsql.com/drwpotzv
 
 CMD ["/app/go-app"]
