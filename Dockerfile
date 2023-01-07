@@ -22,6 +22,4 @@ COPY --from=build-base /app/out/go-app /app/go-app
 
 ENV PORT=":2565"
 
-ENV DATABASE_URL=postgres://drwpotzv:w2RbhmLcpNNQCTSwCNZLcIyhTKdbDrQ6@john.db.elephantsql.com/drwpotzv
-
 CMD ["/app/go-app"]
