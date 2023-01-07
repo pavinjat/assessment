@@ -9,12 +9,13 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/pavinjat/assessment/config"
 	"github.com/pavinjat/assessment/expenses"
-	// "github.com/pavinjat/assessment/config"
 )
 
 func main() {
 
+	config := config.NewConfig()
 	expenses.InitDB()
 
 	e := echo.New()
@@ -35,7 +36,7 @@ func main() {
 	e.PUT("/expenses/:id", expenses.UpdateExpenseHandler)
 
 	go func() {
-		if err := e.Start(":2565"); err != nil && err != http.ErrServerClosed {
+		if err := e.Start(config.Port); err != nil && err != http.ErrServerClosed {
 			e.Logger.Fatal("shutting down the server")
 		}
 	}()

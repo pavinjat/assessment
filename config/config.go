@@ -12,9 +12,9 @@ func getenv(name string) string {
 
 type Config struct {
 	Port  string
-	DbURL string
+	DBurl string
 }
 
 func NewConfig() *Config {
-	return &Config{Port: getenv("PORT"), DbURL: getenv("DATABASE_URL")}
+	return &Config{Port: getenv("PORT"), DBurl: getenv("DATABASE_URL")}
 }
