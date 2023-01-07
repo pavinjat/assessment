@@ -25,6 +25,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.POST("/expenses", expenses.CreateExpenseHandler)
+	e.GET("/expenses/:id", expenses.GetExpenseHandler)
 
 	log.Fatal(e.Start(":2565"))
 }
