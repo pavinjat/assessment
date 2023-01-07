@@ -14,27 +14,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetAllExpensesHandler(t *testing.T) {
-	seedExpense(t)
-	var allexpenses []expenses.Expense
-
-	res := request(http.MethodGet, uri("expenses"), nil)
-	err := res.Decode(&allexpenses)
-
-	assert.Nil(t, err)
-	assert.EqualValues(t, http.StatusOK, res.StatusCode)
-	assert.Greater(t, len(allexpenses), 0)
-}
-
 func TestCreateExpenseHandler(t *testing.T) {
 	body := bytes.NewBufferString(`{
 		"title": "TestObj",
 		"amount": 100,
 		"note": "Note for TestObj", 
-		"tags": ["TestTag1", "TestTag2" ,"TestTag3", "TestTag4"]
+		"tags": ["TestTag1", "TestTag2" ,"TestTag3"]
 	}`)
-	var exp expenses.Expense
 
+	var exp expenses.Expense
 	res := request(http.MethodPost, uri("expenses"), body)
 	err := res.Decode(&exp)
 
@@ -44,8 +32,7 @@ func TestCreateExpenseHandler(t *testing.T) {
 	assert.Equal(t, "TestObj", exp.Title)
 	assert.Equal(t, 100, exp.Amount)
 	assert.Equal(t, "Note for TestObj", exp.Note)
-	/*assert.Equal(t, "TestTag1", exp.Tags)
-	assert.Equal(t, "TestTag2", exp.Tags)*/
+	assert.Equal(t, []string{"TestTag1", "TestTag2", "TestTag3"}, exp.Tags)
 }
 
 func TestGetExpenseHandler(t *testing.T) {
@@ -64,6 +51,22 @@ func TestGetExpenseHandler(t *testing.T) {
 	assert.NotEmpty(t, latest.Tags)
 }
 
+func TestGetAllExpensesHandler(t *testing.T) {
+	seedExpense(t)
+	var allexpenses []expenses.Expense
+
+	res := request(http.MethodGet, uri("expenses"), nil)
+	err := res.Decode(&allexpenses)
+
+	assert.Nil(t, err)
+	assert.EqualValues(t, http.StatusOK, res.StatusCode)
+	assert.Greater(t, len(allexpenses), 0)
+}
+
+/*func TestUpdateExpenseHandler(t *testing.T) {
+	t.Skip("TODO: implement me")
+}*/
+
 func seedExpense(t *testing.T) expenses.Expense {
 	var c expenses.Expense
 	body := bytes.NewBufferString(`{
@@ -78,10 +81,6 @@ func seedExpense(t *testing.T) expenses.Expense {
 	}
 	return c
 }
-
-/*func TestUpdateExpenseHandler(t *testing.T) {
-	t.Skip("TODO: implement me")
-}*/
 
 func uri(paths ...string) string {
 	host := "http://localhost:2565"
